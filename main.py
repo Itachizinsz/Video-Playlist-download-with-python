@@ -1,14 +1,14 @@
 from tkinter import *
 
 from pytube import YouTube
-
+import os
 
 
 
 escolha = int(input('Escolha o metodo de download: '))
 
 if escolha == 1:
-    url = input('Digite o link do vídeo: ')
+    url = input('Digite o link do vídeo \n >>')
     youTube = YouTube(url)
     print('iniciando')
     print("Titulo: " + youTube.title)
@@ -23,7 +23,7 @@ elif escolha == 2:
     YOUTUBE_STREAM_AUDIO: str = '140'  # modify the value to download a different stream
     DOWNLOAD_DIR = 'C:\\xampp\\htdocs\\python\\Final_test\\music'
 
-    url = input('Digite sua url: ')
+    url = input('Digite sua playlist \n >>')
     playlist = Playlist(url)
 
     print('Seu download começou!')
@@ -41,15 +41,22 @@ elif escolha == 2:
 
     print('Download completo!!!')
 
-    janela = Tk()
-    janela.title('interface de python')
-    janela.geometry('300x300')
-    # janela.config(bg='purple')
-    janela.resizable(width=False, height=False)
+elif escolha == 3:
+    DOWNLOAD_DIR = 'C:\\xampp\\htdocs\\python\\Final_test\\music'
+    # url input from user
+    yt = YouTube(
+        str(input('Digite seu link: \n>> ')))
+    print('Seu download começou!')
+    # extract only audio
+    video = yt.streams.filter(only_audio=True).first()
 
-    texto_orientacao = Label(janela, text='Escolha o metodo')
-    texto_orientacao.grid(column=0, row=0)
-
-    botao = Button(janela, text='Clique aqui para executar', command='')
-
-    janela.mainloop()
+    # download the file
+    out_file = video.download(output_path=DOWNLOAD_DIR)
+    
+    # save the file
+    base, ext = os.path.splitext(out_file)
+    new_file = base + '.mp3'
+    os.rename(out_file, new_file)
+    
+    # result of success
+    print(yt.title + " \nSeu download foi concluido!")
